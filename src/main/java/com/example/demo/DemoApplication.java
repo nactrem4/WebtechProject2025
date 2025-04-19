@@ -2,7 +2,7 @@ package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-/* test 1*/
+/* test 2*/
 @SpringBootApplication
 public class DemoApplication {
 
