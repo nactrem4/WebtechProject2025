@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    username: ${DATASOURCE_USERNAME}
+    url: ${DATASOURCE_URL}
+    password: ${DATASOURCE_PASSWORD}
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        jdbc:
+          time_zone: UTC
+    show-sql: false # Set true for debugging
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update # (create, create-drop, validate, update)
+    open-in-view: false
+  sql:
+    init:
+      platform: h2
+      mode: always
