@@ -23,15 +23,15 @@ public class TastaturRestController {
         this.tastaturService = tastaturService;
     }
 
-
     @GetMapping(path = "/api/v1/tastaturen")
     public ResponseEntity<List<Tastatur>> fetchTastaturen() {
         return ResponseEntity.ok(tastaturService.findall());
     }
-    @PostMapping(path = "api/v1/tasturen")
+
+    @PostMapping(path = "/api/v1/tastaturen")
     public ResponseEntity<Void> createTastatur(@RequestBody TastaturCreateRequest request) throws URISyntaxException {
     var tastatur = tastaturService.create(request);
-    URI uri = new URI("api/v1/tasturen/" + tastatur.getId());
+    URI uri = new URI("/api/v1/tastaturen/" + tastatur.getId());
     return ResponseEntity.created(uri).build();
     }
 

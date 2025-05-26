@@ -13,6 +13,8 @@ public class TastaturCreateRequest {
         this.keycaps = keycaps;
     }
 
+    public TastaturCreateRequest(){}
+
     public String getTastaturName() {
         return tastaturname;
     }
@@ -40,7 +42,6 @@ public class TastaturCreateRequest {
     public String getKeycaps() {
         return keycaps;
     }
-
     public void setKeycaps(String keycaps) {
         this.keycaps = keycaps;
     }
