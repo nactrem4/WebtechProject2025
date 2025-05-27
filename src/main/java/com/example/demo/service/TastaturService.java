@@ -25,11 +25,37 @@ public class TastaturService {
                 .collect(Collectors.toList());
 
     }
+    public Tastatur findById(Long id) {
+        var tastaturEntität = tastaturRepository.findById(id);
+        return tastaturEntität.map(this::transformEntität).orElse(null);
+    }
 
     public Tastatur create(TastaturCreateRequest request) {
-        var tastaturEntity = new TastaturEntität(request.getTastaturName(), request.getKeycaps(), request.getModell(), request.getSwitches());
-        tastaturRepository.save(tastaturEntity);
-        return transformEntität(tastaturEntity);
+        var tastaturEntität = new TastaturEntität(request.getTastaturName(), request.getModell(), request.getSwitches(), request.getKeycaps());
+        tastaturEntität = tastaturRepository.save(tastaturEntität);
+        return transformEntität(tastaturEntität);
+    }
+    public Tastatur update(Long id, TastaturCreateRequest request) {
+        var tastaturEntitätOptional = tastaturRepository.findById(id);
+        if (tastaturEntitätOptional.isEmpty()) {
+            return null;
+        }
+        var tastaturEntität = tastaturEntitätOptional.get();
+        tastaturEntität.setTastaturname(request.getTastaturName());
+        tastaturEntität.setModell(request.getModell());
+        tastaturEntität.setSwitches(request.getSwitches());
+        tastaturEntität.setKeycaps(request.getKeycaps());
+        tastaturEntität = tastaturRepository.save(tastaturEntität);
+
+        return transformEntität(tastaturEntität);
+    }
+    public boolean deleteById(Long id) {
+        if (!tastaturRepository.existsById(id)) {
+            return false;
+        }
+
+        tastaturRepository.deleteById(id);
+        return true;
     }
 
     private Tastatur transformEntität(TastaturEntität tastaturEntität) {
