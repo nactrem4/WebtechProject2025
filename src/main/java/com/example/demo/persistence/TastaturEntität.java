@@ -10,8 +10,8 @@ public class TastaturEntität {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "tastaturname")
-    private String tastaturname;
+    @Column(name = "tastaturName")
+    private String tastaturName;
 
     @Column(name = "modell")
     private String modell;
@@ -22,34 +22,40 @@ public class TastaturEntität {
     @Column(name = "keycaps")
     private String keycaps;
 
-    @Column(name = "beschreibung")  // NEU
+    @Column(name = "beschreibung")
     private String beschreibung;
 
-    @Column(name = "bild_url")  // NEU
+    @Column(name = "bildUrl")
     private String bildUrl;
 
-    // Neuer Konstruktor mit allen Feldern
-    public TastaturEntität(String tastaturname, String modell, String switches, String keycaps, String beschreibung, String bildUrl) {
-        this.tastaturname = tastaturname;
+    @Lob
+    @Column(name = "bild", columnDefinition = "BYTEA")
+    private byte[] bild;
+
+    public TastaturEntität(String tastaturName, String modell, String switches, String keycaps, String beschreibung, String bildUrl, byte[] bild) {
+        this.tastaturName = tastaturName;
         this.modell = modell;
         this.switches = switches;
         this.keycaps = keycaps;
         this.beschreibung = beschreibung;
         this.bildUrl = bildUrl;
+        this.bild = bild;
     }
 
-    protected TastaturEntität() {}
+    public TastaturEntität() {
+
+    }
 
     public Long getId() {
         return id;
     }
 
-    public String getTastaturname() {
-        return tastaturname;
+    public String getTastaturName() {
+        return tastaturName;
     }
 
-    public void setTastaturname(String tastaturname) {
-        this.tastaturname = tastaturname;
+    public void setTastaturName(String tastaturName) {
+        this.tastaturName = tastaturName;
     }
 
     public String getModell() {
@@ -91,4 +97,14 @@ public class TastaturEntität {
     public void setBildUrl(String bildUrl) {
         this.bildUrl = bildUrl;
     }
+
+    public byte[] getBild() {
+        return bild;
+    }
+
+    public void setBild(byte[] bild) {
+        this.bild = bild;
+    }
+
+
 }

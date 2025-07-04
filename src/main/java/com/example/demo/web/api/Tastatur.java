@@ -2,21 +2,24 @@ package com.example.demo.web.api;
 
 public class Tastatur {
     private Long id;
-    private String tastaturname;
+    private String tastaturName;
     private String modell;
     private String switches;
     private String keycaps;
-    private String beschreibung;  // neu
-    private String bildUrl;       // neu
+    private String beschreibung;
+    private String bildUrl;
 
-    public Tastatur(Long id, String tastaturname, String modell, String switches, String keycaps, String beschreibung, String bildUrl) {
+    private byte[] bild;
+
+    public Tastatur(Long id, String tastaturName, String modell, String switches, String keycaps, String beschreibung, String bildUrl, byte[] bild) {
         this.id = id;
-        this.tastaturname = tastaturname;
+        this.tastaturName = tastaturName;
         this.modell = modell;
         this.switches = switches;
         this.keycaps = keycaps;
         this.beschreibung = beschreibung;
         this.bildUrl = bildUrl;
+        this.bild = bild;
     }
 
     public Long getId() {
@@ -28,11 +31,11 @@ public class Tastatur {
     }
 
     public String getTastaturName() {
-        return tastaturname;
+        return tastaturName;
     }
 
-    public void setTastaturName(String tastaturname) {
-        this.tastaturname = tastaturname;
+    public void setTastaturName(String tastaturName) {
+        this.tastaturName = tastaturName;
     }
 
     public String getModell() {
@@ -73,5 +76,13 @@ public class Tastatur {
 
     public void setBildUrl(String bildUrl) {
         this.bildUrl = bildUrl;
+    }
+
+    public byte[] getBild() {
+        return bild;
+    }
+
+    public void setBild(byte[] bild) {
+        this.bild = bild;
     }
 }

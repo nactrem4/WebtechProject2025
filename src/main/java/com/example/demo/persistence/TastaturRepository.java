@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface TastaturRepository extends JpaRepository<TastaturEntität, Long> {
 
-List<TastaturEntität> findAllByTastaturname (String tastaturName);
+List<TastaturEntität> findAllByTastaturName (String tastaturName);
 }

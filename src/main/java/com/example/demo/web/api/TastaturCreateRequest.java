@@ -1,15 +1,17 @@
 package com.example.demo.web.api;
 
 public class TastaturCreateRequest {
-    private String tastaturname;
+    private String tastaturName;
     private String modell;
     private String switches;
     private String keycaps;
     private String beschreibung;
     private String bildUrl;
 
-    public TastaturCreateRequest(String tastaturname, String modell, String switches, String keycaps, String beschreibung, String bildUrl) {
-        this.tastaturname = tastaturname;
+    private String bildBase64;
+
+    public TastaturCreateRequest(String tastaturName, String modell, String switches, String keycaps, String beschreibung, String bildUrl) {
+        this.tastaturName = tastaturName;
         this.modell = modell;
         this.switches = switches;
         this.keycaps = keycaps;
@@ -21,11 +23,11 @@ public class TastaturCreateRequest {
     }
 
     public String getTastaturName() {
-        return tastaturname;
+        return tastaturName;
     }
 
     public void setTastaturName(String tastaturname) {
-        this.tastaturname = tastaturname;
+        this.tastaturName = tastaturname;
     }
 
     public String getModell() {
@@ -66,5 +68,13 @@ public class TastaturCreateRequest {
 
     public void setBildUrl(String bildUrl) {
         this.bildUrl = bildUrl;
+    }
+
+    public String getBildBase64() {
+        return bildBase64;
+    }
+
+    public void setBildBase64(String bildBase64) {
+        this.bildBase64 = bildBase64;
     }
 }

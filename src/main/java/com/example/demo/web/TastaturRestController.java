@@ -1,15 +1,24 @@
 package com.example.demo.web;
 
 
+import com.example.demo.persistence.TastaturEntität;
 import com.example.demo.service.TastaturService;
 import com.example.demo.web.api.Tastatur;
 import com.example.demo.web.api.TastaturCreateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 public class TastaturRestController {
@@ -47,6 +56,17 @@ public class TastaturRestController {
     public ResponseEntity<Void> deleteTastatur(@PathVariable Long id) {
         boolean successful = tastaturService.deleteById(id);
         return successful? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+    @GetMapping(path = "/tastaturen/{id}/bild")
+    public ResponseEntity<byte[]> getTastaturBild(@PathVariable Long id) {
+        var tastatur = tastaturService.findById(id);
+        if (tastatur == null || tastatur.getBild() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "image/jpeg") // Oder passend zu deinem Bildformat
+                .body(tastatur.getBild());
     }
 
 }

@@ -6,6 +6,7 @@ import com.example.demo.web.api.Tastatur;
 import com.example.demo.web.api.TastaturCreateRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,13 +32,18 @@ public class TastaturService {
     }
 
     public Tastatur create(TastaturCreateRequest request) {
+        byte[] bild = null;
+        if (request.getBildBase64() != null && !request.getBildBase64().isEmpty()) {
+            bild = Base64.getDecoder().decode(request.getBildBase64());
+        }
         var tastaturEntität = new TastaturEntität(
                 request.getTastaturName(),
                 request.getModell(),
                 request.getSwitches(),
                 request.getKeycaps(),
                 request.getBeschreibung(),
-                request.getBildUrl()
+                request.getBildUrl(),
+                bild
         );
         tastaturEntität = tastaturRepository.save(tastaturEntität);
         return transformEntität(tastaturEntität);
@@ -49,14 +55,19 @@ public class TastaturService {
             return null;
         }
         var tastaturEntität = tastaturEntitätOptional.get();
-        tastaturEntität.setTastaturname(request.getTastaturName());
+        tastaturEntität.setTastaturName(request.getTastaturName());
         tastaturEntität.setModell(request.getModell());
         tastaturEntität.setSwitches(request.getSwitches());
         tastaturEntität.setKeycaps(request.getKeycaps());
         tastaturEntität.setBeschreibung(request.getBeschreibung());
         tastaturEntität.setBildUrl(request.getBildUrl());
-        tastaturEntität = tastaturRepository.save(tastaturEntität);
 
+        if (request.getBildBase64() != null && !request.getBildBase64().isEmpty()) {
+            byte[] bild = Base64.getDecoder().decode(request.getBildBase64());
+            tastaturEntität.setBild(bild);
+        }
+
+        tastaturEntität = tastaturRepository.save(tastaturEntität);
         return transformEntität(tastaturEntität);
     }
 
@@ -71,12 +82,13 @@ public class TastaturService {
     private Tastatur transformEntität(TastaturEntität tastaturEntität) {
         return new Tastatur(
                 tastaturEntität.getId(),
-                tastaturEntität.getTastaturname(),
+                tastaturEntität.getTastaturName(),
                 tastaturEntität.getModell(),
                 tastaturEntität.getSwitches(),
                 tastaturEntität.getKeycaps(),
                 tastaturEntität.getBeschreibung(),
-                tastaturEntität.getBildUrl()
+                tastaturEntität.getBildUrl(),
+                tastaturEntität.getBild() // hier das Byte-Array mitgeben
         );
     }
 }
