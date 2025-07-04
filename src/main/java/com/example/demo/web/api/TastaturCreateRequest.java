@@ -5,22 +5,27 @@ public class TastaturCreateRequest {
     private String modell;
     private String switches;
     private String keycaps;
+    private String beschreibung;
+    private String bildUrl;
 
-    public TastaturCreateRequest( String tastaturname, String modell, String switches, String keycaps) {
+    public TastaturCreateRequest(String tastaturname, String modell, String switches, String keycaps, String beschreibung, String bildUrl) {
         this.tastaturname = tastaturname;
         this.modell = modell;
         this.switches = switches;
         this.keycaps = keycaps;
+        this.beschreibung = beschreibung;
+        this.bildUrl = bildUrl;
     }
 
-    public TastaturCreateRequest(){}
+    public TastaturCreateRequest() {
+    }
 
     public String getTastaturName() {
         return tastaturname;
     }
 
-    public void setTastaturName(String name) {
-        this.tastaturname = name;
+    public void setTastaturName(String tastaturname) {
+        this.tastaturname = tastaturname;
     }
 
     public String getModell() {
@@ -42,8 +47,24 @@ public class TastaturCreateRequest {
     public String getKeycaps() {
         return keycaps;
     }
+
     public void setKeycaps(String keycaps) {
         this.keycaps = keycaps;
     }
-}
 
+    public String getBeschreibung() {
+        return beschreibung;
+    }
+
+    public void setBeschreibung(String beschreibung) {
+        this.beschreibung = beschreibung;
+    }
+
+    public String getBildUrl() {
+        return bildUrl;
+    }
+
+    public void setBildUrl(String bildUrl) {
+        this.bildUrl = bildUrl;
+    }
+}

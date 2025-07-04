@@ -1,18 +1,22 @@
 package com.example.demo.web.api;
-/*test*/
+
 public class Tastatur {
     private Long id;
     private String tastaturname;
     private String modell;
     private String switches;
     private String keycaps;
+    private String beschreibung;  // neu
+    private String bildUrl;       // neu
 
-    public Tastatur(Long id, String tastaturname, String modell, String switches, String keycaps) {
+    public Tastatur(Long id, String tastaturname, String modell, String switches, String keycaps, String beschreibung, String bildUrl) {
         this.id = id;
         this.tastaturname = tastaturname;
         this.modell = modell;
         this.switches = switches;
         this.keycaps = keycaps;
+        this.beschreibung = beschreibung;
+        this.bildUrl = bildUrl;
     }
 
     public Long getId() {
@@ -27,8 +31,8 @@ public class Tastatur {
         return tastaturname;
     }
 
-    public void setTastaturName(String name) {
-        this.tastaturname = name;
+    public void setTastaturName(String tastaturname) {
+        this.tastaturname = tastaturname;
     }
 
     public String getModell() {
@@ -54,6 +58,20 @@ public class Tastatur {
     public void setKeycaps(String keycaps) {
         this.keycaps = keycaps;
     }
+
+    public String getBeschreibung() {
+        return beschreibung;
+    }
+
+    public void setBeschreibung(String beschreibung) {
+        this.beschreibung = beschreibung;
+    }
+
+    public String getBildUrl() {
+        return bildUrl;
+    }
+
+    public void setBildUrl(String bildUrl) {
+        this.bildUrl = bildUrl;
+    }
 }
-
-

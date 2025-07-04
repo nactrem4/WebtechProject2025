@@ -23,18 +23,26 @@ public class TastaturService {
         return tastaturen.stream()
                 .map(this::transformEntität)
                 .collect(Collectors.toList());
-
     }
+
     public Tastatur findById(Long id) {
         var tastaturEntität = tastaturRepository.findById(id);
         return tastaturEntität.map(this::transformEntität).orElse(null);
     }
 
     public Tastatur create(TastaturCreateRequest request) {
-        var tastaturEntität = new TastaturEntität(request.getTastaturName(), request.getModell(), request.getSwitches(), request.getKeycaps());
+        var tastaturEntität = new TastaturEntität(
+                request.getTastaturName(),
+                request.getModell(),
+                request.getSwitches(),
+                request.getKeycaps(),
+                request.getBeschreibung(),
+                request.getBildUrl()
+        );
         tastaturEntität = tastaturRepository.save(tastaturEntität);
         return transformEntität(tastaturEntität);
     }
+
     public Tastatur update(Long id, TastaturCreateRequest request) {
         var tastaturEntitätOptional = tastaturRepository.findById(id);
         if (tastaturEntitätOptional.isEmpty()) {
@@ -45,15 +53,17 @@ public class TastaturService {
         tastaturEntität.setModell(request.getModell());
         tastaturEntität.setSwitches(request.getSwitches());
         tastaturEntität.setKeycaps(request.getKeycaps());
+        tastaturEntität.setBeschreibung(request.getBeschreibung());
+        tastaturEntität.setBildUrl(request.getBildUrl());
         tastaturEntität = tastaturRepository.save(tastaturEntität);
 
         return transformEntität(tastaturEntität);
     }
+
     public boolean deleteById(Long id) {
         if (!tastaturRepository.existsById(id)) {
             return false;
         }
-
         tastaturRepository.deleteById(id);
         return true;
     }
@@ -64,8 +74,9 @@ public class TastaturService {
                 tastaturEntität.getTastaturname(),
                 tastaturEntität.getModell(),
                 tastaturEntität.getSwitches(),
-                tastaturEntität.getKeycaps()
+                tastaturEntität.getKeycaps(),
+                tastaturEntität.getBeschreibung(),
+                tastaturEntität.getBildUrl()
         );
     }
 }
-

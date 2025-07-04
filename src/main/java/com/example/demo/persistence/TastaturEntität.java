@@ -22,15 +22,23 @@ public class TastaturEntität {
     @Column(name = "keycaps")
     private String keycaps;
 
-    public TastaturEntität(String tastaturname, String modell, String switches, String keycaps) {
+    @Column(name = "beschreibung")  // NEU
+    private String beschreibung;
+
+    @Column(name = "bild_url")  // NEU
+    private String bildUrl;
+
+    // Neuer Konstruktor mit allen Feldern
+    public TastaturEntität(String tastaturname, String modell, String switches, String keycaps, String beschreibung, String bildUrl) {
         this.tastaturname = tastaturname;
         this.modell = modell;
         this.switches = switches;
         this.keycaps = keycaps;
+        this.beschreibung = beschreibung;
+        this.bildUrl = bildUrl;
     }
 
-    protected TastaturEntität() {
-    }
+    protected TastaturEntität() {}
 
     public Long getId() {
         return id;
@@ -66,5 +74,21 @@ public class TastaturEntität {
 
     public void setKeycaps(String keycaps) {
         this.keycaps = keycaps;
+    }
+
+    public String getBeschreibung() {
+        return beschreibung;
+    }
+
+    public void setBeschreibung(String beschreibung) {
+        this.beschreibung = beschreibung;
+    }
+
+    public String getBildUrl() {
+        return bildUrl;
+    }
+
+    public void setBildUrl(String bildUrl) {
+        this.bildUrl = bildUrl;
     }
 }
