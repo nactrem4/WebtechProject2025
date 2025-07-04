@@ -79,6 +79,15 @@ public class TastaturService {
         return true;
     }
 
+    public boolean saveBild(Long id, byte[] bild) {
+        var opt = tastaturRepository.findById(id);
+        if (opt.isEmpty()) return false;
+        var tastatur = opt.get();
+        tastatur.setBild(bild);
+        tastaturRepository.save(tastatur);
+        return true;
+    }
+
     private Tastatur transformEntität(TastaturEntität tastaturEntität) {
         return new Tastatur(
                 tastaturEntität.getId(),
@@ -88,7 +97,7 @@ public class TastaturService {
                 tastaturEntität.getKeycaps(),
                 tastaturEntität.getBeschreibung(),
                 tastaturEntität.getBildUrl(),
-                tastaturEntität.getBild() // hier das Byte-Array mitgeben
+                tastaturEntität.getBild()
         );
     }
 }

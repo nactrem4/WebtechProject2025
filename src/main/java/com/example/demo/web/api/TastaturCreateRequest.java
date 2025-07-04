@@ -7,8 +7,10 @@ public class TastaturCreateRequest {
     private String keycaps;
     private String beschreibung;
     private String bildUrl;
+    private String bildBase64;  // Base64-codiertes Bild optional
 
-    private String bildBase64;
+    public TastaturCreateRequest() {
+    }
 
     public TastaturCreateRequest(String tastaturName, String modell, String switches, String keycaps, String beschreibung, String bildUrl) {
         this.tastaturName = tastaturName;
@@ -19,15 +21,14 @@ public class TastaturCreateRequest {
         this.bildUrl = bildUrl;
     }
 
-    public TastaturCreateRequest() {
-    }
+    // Getter und Setter
 
     public String getTastaturName() {
         return tastaturName;
     }
 
-    public void setTastaturName(String tastaturname) {
-        this.tastaturName = tastaturname;
+    public void setTastaturName(String tastaturName) {
+        this.tastaturName = tastaturName;
     }
 
     public String getModell() {
