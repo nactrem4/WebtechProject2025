@@ -1,19 +1,19 @@
 package com.example.demo.web;
 
+import com.example.demo.persistence.TastaturEntität;
 import com.example.demo.service.TastaturService;
-import com.example.demo.web.api.Tastatur;
 import com.example.demo.web.api.TastaturCreateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/tastaturen")
+@CrossOrigin(origins = "*")
 public class TastaturRestController {
 
     private final TastaturService tastaturService;
@@ -23,39 +23,49 @@ public class TastaturRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Tastatur>> fetchTastaturen() {
-        return ResponseEntity.ok(tastaturService.findall());
+    public ResponseEntity<List<TastaturEntität>> fetchTastaturen(@RequestParam(required = false, name = "q") String query) {
+        List<TastaturEntität> ergebnisse;
+        if (query == null || query.isBlank()) {
+            ergebnisse = tastaturService.findall();
+        } else {
+            ergebnisse = tastaturService.sucheNachName(query);  // Teil-Suche verwenden
+        }
+
+        if (ergebnisse.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(ergebnisse);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tastatur> fetchTastaturById(@PathVariable Long id) {
+    public ResponseEntity<TastaturEntität> fetchTastaturById(@PathVariable Long id) {
         var tastatur = tastaturService.findById(id);
         return tastatur != null ? ResponseEntity.ok(tastatur) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<Void> createTastatur(@RequestBody TastaturCreateRequest request) throws URISyntaxException {
+    public ResponseEntity<TastaturEntität> createTastatur(@RequestBody TastaturCreateRequest request) {
         var tastatur = tastaturService.create(request);
-        URI uri = new URI("/tastaturen/" + tastatur.getId());
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(URI.create("/tastaturen/" + tastatur.getId()))
+                .body(tastatur);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Tastatur> updateTastatur(@PathVariable Long id, @RequestBody TastaturCreateRequest request) {
+    public ResponseEntity<TastaturEntität> updateTastatur(@PathVariable Long id, @RequestBody TastaturCreateRequest request) {
         var tastatur = tastaturService.update(id, request);
         return tastatur != null ? ResponseEntity.ok(tastatur) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTastatur(@PathVariable Long id) {
-        boolean successful = tastaturService.deleteById(id);
-        return successful ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        boolean success = tastaturService.deleteById(id);
+        return success ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/{id}/bild")
     public ResponseEntity<byte[]> getTastaturBild(@PathVariable Long id) {
         var tastatur = tastaturService.findById(id);
-        if (tastatur == null || tastatur.getBild() == null) {
+        if (tastatur == null || tastatur.getBild() == null || tastatur.getBild().length == 0) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok()
@@ -63,18 +73,40 @@ public class TastaturRestController {
                 .body(tastatur.getBild());
     }
 
-    // Optional: separater Upload-Endpoint für Bild-Upload nach Erstellung
     @PostMapping("/{id}/uploadBild")
-    public ResponseEntity<Void> uploadBild(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<Void> uploadBild(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws Exception {
+        if (file.isEmpty()) return ResponseEntity.badRequest().build();
+        boolean success = tastaturService.saveBild(id, file.getBytes());
+        return success ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
 
-        byte[] bildBytes = file.getBytes();
-        boolean success = tastaturService.saveBild(id, bildBytes);
-        if (!success) {
+    @DeleteMapping("/{id}/bild")
+    public ResponseEntity<Void> deleteBild(@PathVariable Long id) {
+        var tastatur = tastaturService.findById(id);
+        if (tastatur == null) {
             return ResponseEntity.notFound().build();
         }
+        tastatur.setBild(null);
+        tastaturService.save(tastatur);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/vote")
+    public ResponseEntity<TastaturEntität> vote(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        String type = body.get("type");
+        if (!"up".equals(type) && !"down".equals(type)) {
+            return ResponseEntity.badRequest().build();
+        }
+        var tastatur = tastaturService.findById(id);
+        if (tastatur == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if ("up".equals(type)) {
+            tastatur.setUpvotes(tastatur.getUpvotes() + 1);
+        } else {
+            tastatur.setDownvotes(tastatur.getDownvotes() + 1);
+        }
+        TastaturEntität updatedTastatur = tastaturService.save(tastatur);
+        return ResponseEntity.ok(updatedTastatur);
     }
 }

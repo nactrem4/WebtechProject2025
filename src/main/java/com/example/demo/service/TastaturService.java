@@ -2,13 +2,12 @@ package com.example.demo.service;
 
 import com.example.demo.persistence.TastaturEntität;
 import com.example.demo.persistence.TastaturRepository;
-import com.example.demo.web.api.Tastatur;
 import com.example.demo.web.api.TastaturCreateRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class TastaturService {
@@ -19,85 +18,71 @@ public class TastaturService {
         this.tastaturRepository = tastaturRepository;
     }
 
-    public List<Tastatur> findall() {
-        List<TastaturEntität> tastaturen = tastaturRepository.findAll();
-        return tastaturen.stream()
-                .map(this::transformEntität)
-                .collect(Collectors.toList());
+    public List<TastaturEntität> findall() {
+        return tastaturRepository.findAll();
     }
 
-    public Tastatur findById(Long id) {
-        var tastaturEntität = tastaturRepository.findById(id);
-        return tastaturEntität.map(this::transformEntität).orElse(null);
+    public TastaturEntität findById(Long id) {
+        return tastaturRepository.findById(id).orElse(null);
     }
 
-    public Tastatur create(TastaturCreateRequest request) {
-        byte[] bild = null;
-        if (request.getBildBase64() != null && !request.getBildBase64().isEmpty()) {
-            bild = Base64.getDecoder().decode(request.getBildBase64());
+    public TastaturEntität create(TastaturCreateRequest request) {
+        TastaturEntität entity = new TastaturEntität();
+        entity.setTastaturName(request.getTastaturName());
+        entity.setModell(request.getModell());
+        entity.setSwitches(request.getSwitches());
+        entity.setKeycaps(request.getKeycaps());
+        entity.setBeschreibung(request.getBeschreibung());
+
+        if (request.getBild() != null && !request.getBild().isEmpty()) {
+            byte[] bildBytes = Base64.getDecoder().decode(request.getBild());
+            entity.setBild(bildBytes);
         }
-        var tastaturEntität = new TastaturEntität(
-                request.getTastaturName(),
-                request.getModell(),
-                request.getSwitches(),
-                request.getKeycaps(),
-                request.getBeschreibung(),
-                request.getBildUrl(),
-                bild
-        );
-        tastaturEntität = tastaturRepository.save(tastaturEntität);
-        return transformEntität(tastaturEntität);
+
+        return tastaturRepository.save(entity);
     }
 
-    public Tastatur update(Long id, TastaturCreateRequest request) {
-        var tastaturEntitätOptional = tastaturRepository.findById(id);
-        if (tastaturEntitätOptional.isEmpty()) {
-            return null;
-        }
-        var tastaturEntität = tastaturEntitätOptional.get();
-        tastaturEntität.setTastaturName(request.getTastaturName());
-        tastaturEntität.setModell(request.getModell());
-        tastaturEntität.setSwitches(request.getSwitches());
-        tastaturEntität.setKeycaps(request.getKeycaps());
-        tastaturEntität.setBeschreibung(request.getBeschreibung());
-        tastaturEntität.setBildUrl(request.getBildUrl());
+    public TastaturEntität update(Long id, TastaturCreateRequest request) {
+        Optional<TastaturEntität> optEntity = tastaturRepository.findById(id);
+        if (optEntity.isEmpty()) return null;
 
-        if (request.getBildBase64() != null && !request.getBildBase64().isEmpty()) {
-            byte[] bild = Base64.getDecoder().decode(request.getBildBase64());
-            tastaturEntität.setBild(bild);
-        }
+        TastaturEntität entity = optEntity.get();
+        entity.setTastaturName(request.getTastaturName());
+        entity.setModell(request.getModell());
+        entity.setSwitches(request.getSwitches());
+        entity.setKeycaps(request.getKeycaps());
+        entity.setBeschreibung(request.getBeschreibung());
 
-        tastaturEntität = tastaturRepository.save(tastaturEntität);
-        return transformEntität(tastaturEntität);
+        if (request.getBild() != null && !request.getBild().isEmpty()) {
+            byte[] bildBytes = Base64.getDecoder().decode(request.getBild());
+            entity.setBild(bildBytes);
+        }
+        // Optional: wenn kein Bild im Request, Bild beibehalten
+
+        return tastaturRepository.save(entity);
     }
 
     public boolean deleteById(Long id) {
-        if (!tastaturRepository.existsById(id)) {
-            return false;
-        }
+        if (!tastaturRepository.existsById(id)) return false;
         tastaturRepository.deleteById(id);
         return true;
     }
 
-    public boolean saveBild(Long id, byte[] bild) {
-        var opt = tastaturRepository.findById(id);
-        if (opt.isEmpty()) return false;
-        var tastatur = opt.get();
-        tastatur.setBild(bild);
+    public boolean saveBild(Long id, byte[] bildBytes) {
+        Optional<TastaturEntität> optTastatur = tastaturRepository.findById(id);
+        if (optTastatur.isEmpty()) return false;
+
+        TastaturEntität tastatur = optTastatur.get();
+        tastatur.setBild(bildBytes);
         tastaturRepository.save(tastatur);
         return true;
     }
 
-    private Tastatur transformEntität(TastaturEntität tastaturEntität) {
-        return new Tastatur(
-                tastaturEntität.getId(),
-                tastaturEntität.getTastaturName(),
-                tastaturEntität.getModell(),
-                tastaturEntität.getSwitches(),
-                tastaturEntität.getKeycaps(),
-                tastaturEntität.getBeschreibung(),
-                tastaturEntität.getBildUrl(),
-                tastaturEntität.getBild()
-        );
+    public TastaturEntität save(TastaturEntität entity) {
+        return tastaturRepository.save(entity);
+    }
+
+    public List<TastaturEntität> sucheNachName(String query) {
+        return tastaturRepository.findByTastaturNameContainingIgnoreCase(query);
     }
 }

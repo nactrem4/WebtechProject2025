@@ -6,76 +6,35 @@ public class TastaturCreateRequest {
     private String switches;
     private String keycaps;
     private String beschreibung;
-    private String bildUrl;
-    private String bildBase64;  // Base64-codiertes Bild optional
+    private String bild; // Base64-String statt byte[]
 
-    public TastaturCreateRequest() {
-    }
+    public TastaturCreateRequest() {}
 
-    public TastaturCreateRequest(String tastaturName, String modell, String switches, String keycaps, String beschreibung, String bildUrl) {
+    public TastaturCreateRequest(String tastaturName, String modell, String switches, String keycaps, String beschreibung, String bild) {
         this.tastaturName = tastaturName;
         this.modell = modell;
         this.switches = switches;
         this.keycaps = keycaps;
         this.beschreibung = beschreibung;
-        this.bildUrl = bildUrl;
+        this.bild = bild;
     }
 
     // Getter und Setter
+    public String getTastaturName() { return tastaturName; }
+    public void setTastaturName(String tastaturName) { this.tastaturName = tastaturName; }
 
-    public String getTastaturName() {
-        return tastaturName;
-    }
+    public String getModell() { return modell; }
+    public void setModell(String modell) { this.modell = modell; }
 
-    public void setTastaturName(String tastaturName) {
-        this.tastaturName = tastaturName;
-    }
+    public String getSwitches() { return switches; }
+    public void setSwitches(String switches) { this.switches = switches; }
 
-    public String getModell() {
-        return modell;
-    }
+    public String getKeycaps() { return keycaps; }
+    public void setKeycaps(String keycaps) { this.keycaps = keycaps; }
 
-    public void setModell(String modell) {
-        this.modell = modell;
-    }
+    public String getBeschreibung() { return beschreibung; }
+    public void setBeschreibung(String beschreibung) { this.beschreibung = beschreibung; }
 
-    public String getSwitches() {
-        return switches;
-    }
-
-    public void setSwitches(String switches) {
-        this.switches = switches;
-    }
-
-    public String getKeycaps() {
-        return keycaps;
-    }
-
-    public void setKeycaps(String keycaps) {
-        this.keycaps = keycaps;
-    }
-
-    public String getBeschreibung() {
-        return beschreibung;
-    }
-
-    public void setBeschreibung(String beschreibung) {
-        this.beschreibung = beschreibung;
-    }
-
-    public String getBildUrl() {
-        return bildUrl;
-    }
-
-    public void setBildUrl(String bildUrl) {
-        this.bildUrl = bildUrl;
-    }
-
-    public String getBildBase64() {
-        return bildBase64;
-    }
-
-    public void setBildBase64(String bildBase64) {
-        this.bildBase64 = bildBase64;
-    }
+    public String getBild() { return bild; }
+    public void setBild(String bild) { this.bild = bild; }
 }

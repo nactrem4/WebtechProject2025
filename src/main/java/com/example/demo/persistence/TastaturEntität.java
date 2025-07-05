@@ -2,49 +2,36 @@ package com.example.demo.persistence;
 
 import jakarta.persistence.*;
 
-@Entity(name = "tastaturen")
+@Entity
+@Table(name = "tastaturen")
 public class TastaturEntität {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "tastaturName")
+    @Column(name = "tastaturname")
     private String tastaturName;
 
-    @Column(name = "modell")
     private String modell;
 
-    @Column(name = "switches")
     private String switches;
 
-    @Column(name = "keycaps")
     private String keycaps;
 
-    @Column(name = "beschreibung")
+    @Column(length = 1000)
     private String beschreibung;
 
-    @Column(name = "bildUrl")
-    private String bildUrl;
-
-    @Lob
-    @Column(name = "bild", columnDefinition = "BYTEA")
+    @Column(name = "bild", columnDefinition = "bytea")
     private byte[] bild;
 
-    public TastaturEntität(String tastaturName, String modell, String switches, String keycaps, String beschreibung, String bildUrl, byte[] bild) {
-        this.tastaturName = tastaturName;
-        this.modell = modell;
-        this.switches = switches;
-        this.keycaps = keycaps;
-        this.beschreibung = beschreibung;
-        this.bildUrl = bildUrl;
-        this.bild = bild;
-    }
+    @Column(nullable = false)
+    private int upvotes = 0;
 
-    public TastaturEntität() {
+    @Column(nullable = false)
+    private int downvotes = 0;
 
-    }
+    // Getter und Setter
 
     public Long getId() {
         return id;
@@ -90,14 +77,6 @@ public class TastaturEntität {
         this.beschreibung = beschreibung;
     }
 
-    public String getBildUrl() {
-        return bildUrl;
-    }
-
-    public void setBildUrl(String bildUrl) {
-        this.bildUrl = bildUrl;
-    }
-
     public byte[] getBild() {
         return bild;
     }
@@ -106,5 +85,19 @@ public class TastaturEntität {
         this.bild = bild;
     }
 
+    public int getUpvotes() {
+        return upvotes;
+    }
 
+    public void setUpvotes(int upvotes) {
+        this.upvotes = upvotes;
+    }
+
+    public int getDownvotes() {
+        return downvotes;
+    }
+
+    public void setDownvotes(int downvotes) {
+        this.downvotes = downvotes;
+    }
 }

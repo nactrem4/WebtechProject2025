@@ -7,18 +7,15 @@ public class Tastatur {
     private String switches;
     private String keycaps;
     private String beschreibung;
-    private String bildUrl;
-
     private byte[] bild;
 
-    public Tastatur(Long id, String tastaturName, String modell, String switches, String keycaps, String beschreibung, String bildUrl, byte[] bild) {
+    public Tastatur(Long id, String tastaturName, String modell, String switches, String keycaps, String beschreibung, byte[] bild) {
         this.id = id;
         this.tastaturName = tastaturName;
         this.modell = modell;
         this.switches = switches;
         this.keycaps = keycaps;
         this.beschreibung = beschreibung;
-        this.bildUrl = bildUrl;
         this.bild = bild;
     }
 
@@ -70,18 +67,9 @@ public class Tastatur {
         this.beschreibung = beschreibung;
     }
 
-    public String getBildUrl() {
-        return bildUrl;
-    }
-
-    public void setBildUrl(String bildUrl) {
-        this.bildUrl = bildUrl;
-    }
-
     public byte[] getBild() {
         return bild;
     }
-
     public void setBild(byte[] bild) {
         this.bild = bild;
     }
